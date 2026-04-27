@@ -1,7 +1,7 @@
 {
   "name": "create-gaia",
   "version": "0.1.0",
-  "description": "Scaffold a new project from the GAIA React template — a Claude-native React Router 7 starter with TypeScript, Tailwind v4, Vitest, Playwright, and Storybook.",
+  "description": "Scaffold a new project from GAIA React — a Claude-native React Router 7 starter with TypeScript, Tailwind v4, Vitest, Playwright, and Storybook.",
   "keywords": [
     "gaia",
     "react",
@@ -15,7 +15,7 @@
     "playwright",
     "storybook"
   ],
-  "homepage": "https://github.com/gaia-react/react-router",
+  "homepage": "https://github.com/gaia-react/gaia",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gaia-react/create-gaia.git"
