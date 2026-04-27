@@ -1,6 +1,6 @@
 # create-gaia
 
-Scaffold a new project from [GAIA React](https://github.com/gaia-react/gaia) — a Claude-native React Router 7 starter with TypeScript, Tailwind v4, Vitest, Playwright, and Storybook pre-configured.
+Scaffold a new project from [GAIA React](https://github.com/gaia-react/gaia) — the React workflow for Claude. Makes Claude trustworthy enough to own features end-to-end, token-efficient enough to do it at scale, and grounded enough in your stack to answer how-do-I questions without re-reading the codebase.
 
 ## Usage
 
