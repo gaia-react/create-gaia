@@ -12,7 +12,7 @@ import {stdin as input, stdout as output} from 'node:process';
 import {join, resolve} from 'node:path';
 
 const TEMPLATE_REPO = 'gaia-react/gaia';
-const FALLBACK_VERSION = 'v1.0.0';
+const FALLBACK_VERSION = 'v1.0.1';
 
 const args = parseArgs(process.argv.slice(2));
 if (args.help) {
@@ -62,12 +62,14 @@ async function run(args) {
     run_(targetDir, 'git', ['commit', '--quiet', '-m', `chore: scaffold from GAIA ${version}`]);
   }
 
+  const pm = detectPackageManager();
+
   if (!args.noInstall) {
-    console.log('  ↳ npm install (this takes a minute)');
-    run_(targetDir, 'npm', ['install']);
+    console.log(`  ↳ ${pm} install (this takes a minute)`);
+    run_(targetDir, pm, ['install']);
   }
 
-  printWelcome(projectName, version, args.noInstall);
+  printWelcome(projectName, version, args.noInstall, pm);
 }
 
 function parseArgs(argv) {
@@ -186,6 +188,15 @@ function run_(cwd, cmd, argv) {
   }
 }
 
+function detectPackageManager() {
+  try {
+    execSync('pnpm --version', {stdio: 'ignore'});
+    return 'pnpm';
+  } catch {
+    return 'npm';
+  }
+}
+
 function quote(p) {
   return `'${p.replaceAll("'", "'\\''")}'`;
 }
@@ -197,11 +208,11 @@ async function prompt(q) {
   return answer.trim();
 }
 
-function printWelcome(projectName, version, skippedInstall) {
+function printWelcome(projectName, version, skippedInstall, pm = 'npm') {
   console.log(`\n✓ ${projectName} ready (GAIA ${version}).\n`);
   console.log('Next steps:\n');
   console.log(`  cd ${projectName}`);
-  if (skippedInstall) console.log('  npm install');
+  if (skippedInstall) console.log(`  ${pm} install`);
   console.log('  # Open Claude Code in this directory, then:');
   console.log('  #   /gaia-init\n');
   console.log('/gaia-init configures i18n, strips the GAIA branding, installs Claude plugins,');
