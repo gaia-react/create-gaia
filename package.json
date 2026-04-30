@@ -1,6 +1,6 @@
 {
   "name": "create-gaia",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Scaffold a new project from GAIA React — a Claude-native React Router 7 starter with TypeScript, Tailwind v4, Vitest, Playwright, and Storybook.",
   "keywords": [
     "gaia",
