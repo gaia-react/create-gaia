@@ -25,7 +25,7 @@ jobs:
             echo "::error::Tag v$TAG_VERSION does not match package.json version $PKG_VERSION"
             exit 1
           fi
+      - name: Upgrade npm (trusted publishing requires >= 11.5.1)
+        run: npm install -g npm@latest
       - name: Publish to npm
         run: npm publish --access public --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
