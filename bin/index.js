@@ -104,7 +104,7 @@ Options:
   --no-git             Skip git init + initial commit.
   -h, --help           Show this help.
 
-After scaffolding, open the project in Claude Code and run '/gaia-init'.`);
+After scaffolding, open the project in Claude Code and run '/init'.`);
 }
 
 async function assertTargetWritable(targetDir) {
@@ -214,7 +214,6 @@ function printWelcome(projectName, version, skippedInstall, pm = 'npm') {
   console.log(`  cd ${projectName}`);
   if (skippedInstall) console.log(`  ${pm} install`);
   console.log('  # Open Claude Code in this directory, then:');
-  console.log('  #   /gaia-init\n');
-  console.log('/gaia-init configures i18n, strips the GAIA branding, installs Claude plugins,');
-  console.log('and hands you a ready-to-build project.\n');
+  console.log('    /init\n');
+  console.log('/init will complete the setup of your GAIA project.\n');
 }
