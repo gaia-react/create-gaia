@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // create-gaia — scaffold a new GAIA React project.
 //
-// Usage: npx create-gaia <project-name> [--version vX.Y.Z] [--no-install] [--no-git]
+// Usage: npx create-gaia <project-name> [--version vX.Y.Z] [--no-install] [--no-git] [--no-claude]
 
 import {execSync, spawnSync} from 'node:child_process';
 import {createWriteStream} from 'node:fs';
@@ -62,14 +62,21 @@ async function run(args) {
     run_(targetDir, 'git', ['commit', '--quiet', '-m', `chore: scaffold from GAIA ${version}`]);
   }
 
-  const pm = detectPackageManager();
-
   if (!args.noInstall) {
-    console.log(`  ↳ ${pm} install (this takes a minute)`);
-    run_(targetDir, pm, ['install']);
+    ensurePnpm();
+    console.log('  ↳ pnpm install (this takes a minute)');
+    run_(targetDir, 'pnpm', ['install']);
   }
 
-  printWelcome(projectName, version, args.noInstall, pm);
+  if (!args.noClaude && claudeAvailable()) {
+    console.log(`\n✓ ${projectName} ready (GAIA ${version}). Starting setup…\n`);
+    spawnSync('claude', ['--dangerously-skip-permissions', '/gaia-init'], {
+      cwd: targetDir,
+      stdio: 'inherit',
+    });
+  } else {
+    printWelcome(projectName, version, args.noInstall);
+  }
 }
 
 function parseArgs(argv) {
@@ -80,6 +87,7 @@ function parseArgs(argv) {
     else if (a === '--version') result.version = normalizeVersion(argv[++i]);
     else if (a === '--no-install') result.noInstall = true;
     else if (a === '--no-git') result.noGit = true;
+    else if (a === '--no-claude') result.noClaude = true;
     else if (a.startsWith('--')) throw new Error(`Unknown flag: ${a}`);
     else if (!result.projectName) result.projectName = a;
     else throw new Error(`Unexpected argument: ${a}`);
@@ -100,11 +108,13 @@ Usage:
 
 Options:
   --version <vX.Y.Z>   Pin to a specific GAIA release (default: latest).
-  --no-install         Skip 'npm install'.
+  --no-install         Skip dependency install.
   --no-git             Skip git init + initial commit.
+  --no-claude          Skip auto-launching Claude Code (print manual steps instead).
   -h, --help           Show this help.
 
-After scaffolding, open the project in Claude Code and run '/init'.`);
+After scaffolding, Claude Code launches automatically and runs /gaia-init to
+complete setup. Pass --no-claude to skip this and follow the printed steps.`);
 }
 
 async function assertTargetWritable(targetDir) {
@@ -188,12 +198,27 @@ function run_(cwd, cmd, argv) {
   }
 }
 
-function detectPackageManager() {
+function ensurePnpm() {
   try {
     execSync('pnpm --version', {stdio: 'ignore'});
-    return 'pnpm';
+    return;
   } catch {
-    return 'npm';
+    /* not installed — bootstrap it */
+  }
+  console.log('  ↳ pnpm not found, bootstrapping via corepack…');
+  try {
+    execSync('corepack enable pnpm', {stdio: 'inherit'});
+  } catch {
+    execSync('npm install -g pnpm', {stdio: 'inherit'});
+  }
+}
+
+function claudeAvailable() {
+  try {
+    execSync('claude --version', {stdio: 'ignore'});
+    return true;
+  } catch {
+    return false;
   }
 }
 
@@ -208,12 +233,12 @@ async function prompt(q) {
   return answer.trim();
 }
 
-function printWelcome(projectName, version, skippedInstall, pm = 'npm') {
+function printWelcome(projectName, version, skippedInstall) {
   console.log(`\n✓ ${projectName} ready (GAIA ${version}).\n`);
   console.log('Next steps:\n');
   console.log(`  cd ${projectName}`);
-  if (skippedInstall) console.log(`  ${pm} install`);
-  console.log('  # Open Claude Code in this directory, then:');
-  console.log('    /init\n');
-  console.log('/init will complete the setup of your GAIA project.\n');
+  if (skippedInstall) console.log('  pnpm install');
+  console.log('  claude --dangerously-skip-permissions\n');
+  console.log('Then in Claude Code, run:\n');
+  console.log('  /gaia-init\n');
 }
