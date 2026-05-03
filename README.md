@@ -5,7 +5,7 @@ Scaffold a new project from [GAIA React](https://github.com/gaia-react/gaia).
 ## Usage
 
 ```bash
-npx create-gaia my-app
+npx create-gaia@latest my-app
 ```
 
 Then open the new project in Claude Code and run `/init`.
