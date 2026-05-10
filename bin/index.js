@@ -12,7 +12,7 @@ import {stdin as input, stdout as output} from 'node:process';
 import {join, resolve} from 'node:path';
 
 const TEMPLATE_REPO = 'gaia-react/gaia';
-const FALLBACK_VERSION = 'v1.0.4';
+const FALLBACK_VERSION = 'v1.1.0';
 
 const args = parseArgs(process.argv.slice(2));
 if (args.help) {
