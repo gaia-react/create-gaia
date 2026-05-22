@@ -1,6 +1,6 @@
 # create-gaia
 
-Scaffold a new project from [GAIA React](https://github.com/gaia-react/gaia).
+Scaffold a new project from [GAIA React](https://gaiareact.com/) — the Claude Code workflow for React. Source on [GitHub](https://github.com/gaia-react/gaia).
 
 ## Usage
 

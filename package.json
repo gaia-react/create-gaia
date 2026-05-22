@@ -15,7 +15,7 @@
     "playwright",
     "storybook"
   ],
-  "homepage": "https://github.com/gaia-react/gaia",
+  "homepage": "https://gaiareact.com/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gaia-react/create-gaia.git"
