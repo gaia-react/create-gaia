@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// create-gaia — scaffold a new GAIA React project.
+// create-gaia: scaffold a new GAIA React project.
 //
 // Usage: npx create-gaia <project-name> [--version vX.Y.Z] [--no-install] [--no-git] [--no-claude]
 
@@ -11,8 +11,10 @@ import {createInterface} from 'node:readline/promises';
 import {stdin as input, stdout as output} from 'node:process';
 import {join, resolve} from 'node:path';
 
+import {tarballAssetName} from './asset-name.js';
+
 const TEMPLATE_REPO = 'gaia-react/gaia';
-const FALLBACK_VERSION = 'v1.6.1';
+const FALLBACK_VERSION = 'v2.0.0';
 
 const args = parseArgs(process.argv.slice(2));
 if (args.help) {
@@ -36,7 +38,7 @@ async function run(args) {
   await assertTargetWritable(targetDir);
 
   const version = args.version ?? (await resolveLatestVersion());
-  const tarballUrl = `https://github.com/${TEMPLATE_REPO}/releases/download/${version}/gaia-${version}.tar.gz`;
+  const tarballUrl = `https://github.com/${TEMPLATE_REPO}/releases/download/${version}/${tarballAssetName(version)}`;
 
   console.log(`\nCreating ${projectName} from GAIA ${version}...`);
 
@@ -101,7 +103,7 @@ function normalizeVersion(v) {
 }
 
 function printHelp() {
-  console.log(`create-gaia — scaffold a new GAIA React project
+  console.log(`create-gaia: scaffold a new GAIA React project
 
 Usage:
   npx create-gaia <project-name> [options]
@@ -203,7 +205,7 @@ function ensurePnpm() {
     execSync('pnpm --version', {stdio: 'ignore'});
     return;
   } catch {
-    /* not installed — bootstrap it */
+    /* not installed, bootstrap it */
   }
   console.log('  ↳ pnpm not found, bootstrapping via corepack…');
   try {

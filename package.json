@@ -1,6 +1,6 @@
 {
   "name": "create-gaia",
-  "version": "1.6.1",
+  "version": "2.0.0",
   "description": "Scaffold a new GAIA React project. A Claude-native React Router 7 workflow with TypeScript, Tailwind v4, Vitest, Playwright, and Storybook.",
   "keywords": [
     "gaia",
@@ -28,6 +28,9 @@
   "type": "module",
   "bin": {
     "create-gaia": "./bin/index.js"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js"
   },
   "files": [
     "bin",
